@@ -3,7 +3,7 @@ import json
 
 import pyodbc as pyodbc
 
-data = pd.read_csv(r'C:\Study\8 semestr\pythonProject\studentProgress.csv', delimiter=';')
+data = pd.read_csv(r'/studentProgress.csv', delimiter=';')
 df = pd.DataFrame(data,
                   columns=['Студент', 'Группа', 'Дисциплина', 'Семестр', 'УчебныйГод', 'Оценка', 'Специальность',
                            'ФормаОбучения', 'Квалификация', 'Статус'])
@@ -18,7 +18,7 @@ for i, ii in enumerate(df['Дисциплина']):
 
 print(subjects)
 
-with open('subjects.txt', 'w') as f:
+with open('../files/subjects.txt', 'w') as f:
     for item in subjects:
         f.write("%s\n" % item)
 
