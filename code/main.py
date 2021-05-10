@@ -1,7 +1,9 @@
 import os
+
+import mysql as mysql
+import mysql.connector
 import pandas as pd
 import json
-
 
 filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\files\\studentProgress.csv"
 print(filepath)
@@ -21,9 +23,16 @@ for i, ii in enumerate(df['Дисциплина']):
 
 print(subjects)
 
-with open('../files/subjects.txt', 'w') as f:
-    for item in subjects:
-        f.write("%s\n" % item)
+# with open('../files/subjects.txt', 'w') as f:
+#     for item in subjects:
+#         f.write("%s\n" % item)
+
+conn = mysql.connector.connect(host='46.229.214.191',
+                               database='trajectories_test',
+                               user='testuser',
+                               password='testuser')
+if conn.is_connected():
+    print('Connected to MySQL database')
 
 # conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
 #                       'Server=LAPTOP-87B1DRMT;'
