@@ -9,7 +9,7 @@ data = pd.read_csv(filepath, delimiter=';', encoding='utf-8')
 df = pd.DataFrame(data,
                   columns=['Студент', 'Группа', 'Дисциплина', 'Семестр', 'УчебныйГод', 'Оценка', 'Специальность',
                            'ФормаОбучения', 'Квалификация', 'Статус'])
-# df = df.fillna(0)
+df = df.fillna(0)
 # print(df)
 
 # subjects = []
@@ -60,12 +60,12 @@ i = 1
 cursor = conn.cursor()
 for row in df.itertuples():
     if not row.Группа in existGroups:
-        cursor.execute(
-            "INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
-            [row.Группа,
-             row.Специальность,
-             row.ФормаОбучения,
-             row.Квалификация])
+        cursor.execute('''
+            INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )''',
+                       [row.Группа,
+                        row.Специальность,
+                        row.ФормаОбучения,
+                        row.Квалификация])
         existGroups.append(row.Группа)
 
 # for row in df.itertuples():
@@ -86,4 +86,4 @@ for row in df.itertuples():
 #                     row.Студент,
 #                     row.Дисциплина])  # здесь нужен id, у нас название
 #
-# conn.commit()
+conn.commit()
