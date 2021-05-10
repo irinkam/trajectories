@@ -1,9 +1,6 @@
 import os
-
-import mysql as mysql
 import mysql.connector
 import pandas as pd
-import json
 
 filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\files\\studentProgress.csv"
 print(filepath)
@@ -15,13 +12,11 @@ df = pd.DataFrame(data,
 
 print(df)
 
-subjects = []
-
-for i, ii in enumerate(df['Дисциплина']):
-    if not (df['Дисциплина'][i] in subjects):
-        subjects.append(df['Дисциплина'][i])
-
-print(subjects)
+# subjects = []
+# for i, ii in enumerate(df['Дисциплина']):
+#     if not (df['Дисциплина'][i] in subjects):
+#         subjects.append(df['Дисциплина'][i])
+# print(subjects)
 
 # with open('../files/subjects.txt', 'w') as f:
 #     for item in subjects:
@@ -38,7 +33,6 @@ if conn.is_connected():
 #                       'Server=LAPTOP-87B1DRMT;'
 #                       'Database=vkr;'
 #                       'Trusted_Connection=yes;')
-# cursor = conn.cursor()
 #
 # conn.execute('CREATE TABLE Оценки(ID nvarchar(60) NOT NULL, Группа nvarchar(60), Дисциплина nvarchar(300),'
 #              'Семестр nvarchar(2),'
@@ -59,21 +53,16 @@ if conn.is_connected():
 #     if df['Оценка'][i] == 'неудовлетворительно':
 #         df['Оценка'][i] = 2
 
+existGroups = []
 
-# for row in df.itertuples():
-#     cursor.execute('''
-#                           INSERT INTO vkr.dbo.Оценки (ID, Группа, Дисциплина, Семестр, УчебныйГод, Оценка, Специальность,
-#                            ФормаОбучения, Квалификация, Статус)
-#                          VALUES (?,?,?,?,?,?,?,?,?,?)
-#                            ''',
-#                    row.Студент,
-#                    row.Группа,
-#                    row.Дисциплина,
-#                    row.Семестр,
-#                    row.УчебныйГод,
-#                    row.Оценка,
-#                    row.Специальность,
-#                    row.ФормаОбучения,
-#                    row.Квалификация,
-#                    row.Статус
-#                    )
+cursor = conn.cursor()
+for row in df.itertuples():
+    if not row.Группа in existGroups:
+        cursor.execute("INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
+                        [row.Группа,
+                        row.Специальность,
+                        row.ФормаОбучения,
+                        row.Квалификация])
+        existGroups.append(row.Группа)
+
+conn.commit()
