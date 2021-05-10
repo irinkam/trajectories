@@ -29,20 +29,6 @@ conn = mysql.connector.connect(host='46.229.214.191',
 if conn.is_connected():
     print('Connected to MySQL database')
 
-# conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
-#                       'Server=LAPTOP-87B1DRMT;'
-#                       'Database=vkr;'
-#                       'Trusted_Connection=yes;')
-#
-# conn.execute('CREATE TABLE Оценки(ID nvarchar(60) NOT NULL, Группа nvarchar(60), Дисциплина nvarchar(300),'
-#              'Семестр nvarchar(2),'
-#              'УчебныйГод nvarchar(9),'
-#              'Оценка nvarchar(20),'
-#              'Специальность nvarchar(300),'
-#              'ФормаОбучения nvarchar(50),'
-#              'Квалификация nvarchar(50),'
-#              'Статус nvarchar(50))')
-
 # for i, ii in enumerate(df['Оценка']):
 #     if df['Оценка'][i] == 'отлично':
 #         df['Оценка'][i] = 5
