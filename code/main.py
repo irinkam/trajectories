@@ -3,7 +3,7 @@ import pandas as pd
 import json
 
 
-filepath = pd.read_csv(os.path.dirname(os.path.abspath(__file__))) + "\\files\\studentProgress.csv"
+filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\files\\studentProgress.csv"
 print(filepath)
 data = pd.read_csv(filepath, delimiter=';', encoding='utf-8')
 
