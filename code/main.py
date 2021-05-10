@@ -41,14 +41,35 @@ if conn.is_connected():
 
 existGroups = []
 
+i = 1
+
 cursor = conn.cursor()
 for row in df.itertuples():
     if not row.Группа in existGroups:
-        cursor.execute("INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
-                        [row.Группа,
-                        row.Специальность,
-                        row.ФормаОбучения,
-                        row.Квалификация])
+        cursor.execute(
+            "INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
+            [row.Группа,
+             row.Специальность,
+             row.ФормаОбучения,
+             row.Квалификация])
         existGroups.append(row.Группа)
+
+for row in df.itertuples():
+    cursor.execute("INSERT INTO students (students_id, status, groups_id) VALUES ( %s, %s, %s)",
+                   [row.Студент,
+                    row.Статус,
+                    row.Группа])
+for row in df.itertuples():
+    cursor.execute("INSERT INTO disciplines (disciplines_id, name) VALUES ( %s, %s)",
+                   [i,
+                    row.Дисциплина])
+    i += 1
+for row in df.itertuples():
+    cursor.execute("INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s, %s )",
+                   [row.Оценка,
+                    row.УчебныйГод,
+                    row.Семестр,
+                    row.Студент,
+                    row.Дисциплина])  # здесь нужен id, у нас название
 
 conn.commit()
