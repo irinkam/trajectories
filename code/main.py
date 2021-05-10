@@ -9,8 +9,8 @@ data = pd.read_csv(filepath, delimiter=';', encoding='utf-8')
 df = pd.DataFrame(data,
                   columns=['Студент', 'Группа', 'Дисциплина', 'Семестр', 'УчебныйГод', 'Оценка', 'Специальность',
                            'ФормаОбучения', 'Квалификация', 'Статус'])
-
-print(df)
+# df = df.fillna(0)
+# print(df)
 
 # subjects = []
 # for i, ii in enumerate(df['Дисциплина']):
@@ -28,6 +28,20 @@ conn = mysql.connector.connect(host='46.229.214.191',
                                password='testuser')
 if conn.is_connected():
     print('Connected to MySQL database')
+
+# conn = pyodbc.connect('Driver={ODBC Driver 17 for SQL Server};'
+#                       'Server=LAPTOP-87B1DRMT;'
+#                       'Database=vkr;'
+#                       'Trusted_Connection=yes;')
+#
+# conn.execute('CREATE TABLE Оценки(ID nvarchar(60) NOT NULL, Группа nvarchar(60), Дисциплина nvarchar(300),'
+#              'Семестр nvarchar(2),'
+#              'УчебныйГод nvarchar(9),'
+#              'Оценка nvarchar(20),'
+#              'Специальность nvarchar(300),'
+#              'ФормаОбучения nvarchar(50),'
+#              'Квалификация nvarchar(50),'
+#              'Статус nvarchar(50))')
 
 # for i, ii in enumerate(df['Оценка']):
 #     if df['Оценка'][i] == 'отлично':
@@ -54,22 +68,22 @@ for row in df.itertuples():
              row.Квалификация])
         existGroups.append(row.Группа)
 
-for row in df.itertuples():
-    cursor.execute("INSERT INTO students (students_id, status, groups_id) VALUES ( %s, %s, %s)",
-                   [row.Студент,
-                    row.Статус,
-                    row.Группа])
-for row in df.itertuples():
-    cursor.execute("INSERT INTO disciplines (disciplines_id, name) VALUES ( %s, %s)",
-                   [i,
-                    row.Дисциплина])
-    i += 1
-for row in df.itertuples():
-    cursor.execute("INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s, %s )",
-                   [row.Оценка,
-                    row.УчебныйГод,
-                    row.Семестр,
-                    row.Студент,
-                    row.Дисциплина])  # здесь нужен id, у нас название
-
-conn.commit()
+# for row in df.itertuples():
+#     cursor.execute("INSERT INTO students (students_id, status, groups_id) VALUES ( %s, %s, %s)",
+#                    [row.Студент,
+#                     row.Статус,
+#                     row.Группа])
+# for row in df.itertuples():
+#     cursor.execute("INSERT INTO disciplines (disciplines_id, name) VALUES ( %s, %s)",
+#                    [i,
+#                     row.Дисциплина])
+#     i += 1
+# for row in df.itertuples():
+#     cursor.execute("INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s, %s )",
+#                    [row.Оценка,
+#                     row.УчебныйГод,
+#                     row.Семестр,
+#                     row.Студент,
+#                     row.Дисциплина])  # здесь нужен id, у нас название
+#
+# conn.commit()
