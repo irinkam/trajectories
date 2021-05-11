@@ -11,7 +11,7 @@ df = pd.DataFrame(data,
                            'ФормаОбучения', 'Квалификация', 'Статус'])
 
 df = df.fillna(0)
-print(df)
+#print(df)
 
 # subjects = []
 # for i, ii in enumerate(df['Дисциплина']):
@@ -57,27 +57,37 @@ cursor = conn.cursor()
 #              row.ФормаОбучения,
 #              row.Квалификация])
 #         existGroups.append(row.Группа)
-
-for row in df.itertuples():
-    if not row.Студент in existStudents:
-        cursor.execute("INSERT INTO `students` (students_id, status, groups_id) VALUES ( %s, %s, %s)",
-                   [row.Студент,
-                    row.Статус,
-                    row.Группа])
-        existStudents.append(row.Студент)
+#
+# for row in df.itertuples():
+#     if not row.Студент in existStudents:
+#         cursor.execute("INSERT INTO `students` (students_id, status, groups_id) VALUES ( %s, %s, %s)",
+#                    [row.Студент,
+#                     row.Статус,
+#                     row.Группа])
+#         existStudents.append(row.Студент)
 
 # for row in df.itertuples():
 #     if not row.Дисциплина in existDisciplines:
 #         cursor.execute("INSERT INTO disciplines (disciplines_id, name) VALUES ( %s, %s)",
 #                    [i,
 #                     row.Дисциплина])
+#         existDisciplines.append(row.Дисциплина)
 #     i += 1
+
 # for row in df.itertuples():
-#     cursor.execute("INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s, %s )",
+#     cursor.execute("INSERT INTO marks (mark, `year`, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s, %s )",
 #                    [row.Оценка,
 #                     row.УчебныйГод,
 #                     row.Семестр,
 #                     row.Студент,
 #                     row.Дисциплина])  # здесь нужен id, у нас название
 
+for row in df.itertuples():
+        cursor.execute(
+            "INSERT INTO marks (mark, `year`, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s),"
+            "select disciplines_id from disciplines join marks on disciplines.disciplines_id = marks.disciplines_id",
+            [row.Оценка,
+             row.УчебныйГод,
+             row.Семестр,
+             row.Студент])  # здесь нужен id, у нас название
 conn.commit()
