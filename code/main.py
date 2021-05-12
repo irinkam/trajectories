@@ -86,10 +86,12 @@ cursor = conn.cursor()
 
 for row in df.itertuples():
         cursor.execute(
-            "INSERT INTO marks (mark, `year`, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s),"
+            "INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES (%s, %s, %s, %s, (SELECT disciplines_id FROM disciplines WHERE name = %s))",
             [row.Оценка,
              row.УчебныйГод,
              row.Семестр,
-             row.Студент])  # здесь нужен id, у нас название
+             row.Студент,
+             row.Дисциплина])  # здесь нужен id, у нас название
 
 conn.commit()
+
