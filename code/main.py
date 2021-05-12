@@ -12,6 +12,7 @@ df = pd.DataFrame(data,
 
 df = df.fillna(0)
 #print(df)
+df1 = pd.DataFrame()
 
 # subjects = []
 # for i, ii in enumerate(df['Дисциплина']):
@@ -82,12 +83,13 @@ cursor = conn.cursor()
 #                     row.Студент,
 #                     row.Дисциплина])  # здесь нужен id, у нас название
 
+
 for row in df.itertuples():
         cursor.execute(
             "INSERT INTO marks (mark, `year`, semestr, students_id, disciplines_id) VALUES ( %s, %s, %s, %s),"
-            "select disciplines_id from disciplines join marks on disciplines.disciplines_id = marks.disciplines_id",
             [row.Оценка,
              row.УчебныйГод,
              row.Семестр,
              row.Студент])  # здесь нужен id, у нас название
+
 conn.commit()
