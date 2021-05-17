@@ -1,5 +1,4 @@
 import os
-import mysql.connector
 import pandas as pd
 
 filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\files\\disciplines.csv"
@@ -27,12 +26,17 @@ for row in df.itertuples():
             list_of_disciplines.append(g)
             list_of_avgmark.append(sum / count)
             break
-#df.drop_duplicates(subset=['name'])
 
 i = 0
 while i < len(list_of_disciplines):
     if not list_of_disciplines[i] in list_of_disciplines_distinct:
         list_of_disciplines_distinct.append(list_of_disciplines[i])
+    i += 1
+
+i = 0
+while i < len(list_of_disciplines_distinct):
+    if list_of_disciplines_distinct[i][-5:] == 'Часть':
+        list_of_disciplines_distinct[i] = list_of_disciplines_distinct[i][:-5]
     i += 1
 
 i = 0
@@ -43,4 +47,3 @@ while i < len(list_of_avgmark):
 
 for x in list_of_disciplines_distinct: print(x)
 for x in list_of_avgmark_distinct: print(x)
-print()
