@@ -31,19 +31,19 @@ conn = mysql.connector.connect(host='46.229.214.191',
 if conn.is_connected():
     print('Connected to MySQL database')
 
-for i, ii in enumerate(df['Оценка']):
-    if df['Оценка'][i] == 'отлично':
-        df['Оценка'][i] = 5
-    if df['Оценка'][i] == 'хорошо':
-        df['Оценка'][i] = 4
-    if df['Оценка'][i] == 'удовлетворительно':
-        df['Оценка'][i] = 3
-    if df['Оценка'][i] == 'неудовлетворительно':
-        df['Оценка'][i] = 2
+# for i, ii in enumerate(df['Оценка']):
+#     if df['Оценка'][i] == 'отлично':
+#         df['Оценка'][i] = 5
+#     if df['Оценка'][i] == 'хорошо':
+#         df['Оценка'][i] = 4
+#     if df['Оценка'][i] == 'удовлетворительно':
+#         df['Оценка'][i] = 3
+#     if df['Оценка'][i] == 'неудовлетворительно':
+#         df['Оценка'][i] = 2
 
-existGroups = []
-existStudents = []
-existDisciplines = []
+# existGroups = []
+# existStudents = []
+# existDisciplines = []
 
 i = 1
 
@@ -52,7 +52,7 @@ cursor = conn.cursor()
 # for row in df.itertuples():
 #     if not row.Группа in existGroups:
 #         cursor.execute(
-#             "INSERT INTO `groups` (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
+#             "INSERT INTO groups (groups_id, major, form_of_education, qualificaion) VALUES ( %s, %s, %s, %s )",
 #             [row.Группа,
 #              row.Специальность,
 #              row.ФормаОбучения,
@@ -61,7 +61,7 @@ cursor = conn.cursor()
 #
 # for row in df.itertuples():
 #     if not row.Студент in existStudents:
-#         cursor.execute("INSERT INTO `students` (students_id, status, groups_id) VALUES ( %s, %s, %s)",
+#         cursor.execute("INSERT INTO students (students_id, status, groups_id) VALUES ( %s, %s, %s)",
 #                    [row.Студент,
 #                     row.Статус,
 #                     row.Группа])
@@ -76,6 +76,7 @@ cursor = conn.cursor()
 #     i += 1
 
 for row in df.itertuples():
+    if not row.Оценка == 'зачтено' or not row.Оценка == 'незачет':
         cursor.execute(
             "INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES (%s, %s, %s, %s, (SELECT disciplines_id FROM disciplines WHERE name = %s))",
             [row.Оценка,
@@ -85,5 +86,21 @@ for row in df.itertuples():
              row.Дисциплина])
         conn.commit()
 
-# conn.commit()
+for row in df.itertuples():
+    cursor.execute(
+        "INSERT INTO connection_of_disciplines (connection_id, first_discipline_id, second_discipline_id, weight)"
+        "VALUES (%s, %s, %s, %s, (select smth.disciplines_id, disciplines.disciplines_id, smth.avgMark / disciplines.avgMark "
+        "from disciplines cross join (select disciplines_id, avgMark from disciplines) as smth))"
+        "where disciplines.name <> smth.name and disciplines.avgMark is not null "
+        "and (smth.name and disciplines.name) in"
+        "(select name from marks join disciplines on marks.disciplines_id = disciplines.disciplines_id group by name having count(marks.disciplines_id) > 99)"
+        "and disciplines.name in"
+        "(select name from marks join disciplines on marks.disciplines_id = disciplines.disciplines_id group by name having count(marks.disciplines_id) > 99)",
+        [i,
 
+         ]
+        )
+    conn.commit()
+    i += 1
+
+# conn.commit()
