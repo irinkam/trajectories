@@ -10,6 +10,7 @@ df = pd.DataFrame(data, columns=['number', 'name', 'avgMark'])
 list_of_disciplines = []
 list_of_avgmark = []
 list_of_disciplines_distinct = []
+list_of_avgmark_distinct = []
 
 for row in df.itertuples():
     count = 0
@@ -34,7 +35,12 @@ while i < len(list_of_disciplines):
         list_of_disciplines_distinct.append(list_of_disciplines[i])
     i += 1
 
+i = 0
+while i < len(list_of_avgmark):
+    if not list_of_avgmark[i] in list_of_avgmark_distinct:
+        list_of_avgmark_distinct.append(list_of_avgmark[i])
+    i += 1
 
 for x in list_of_disciplines_distinct: print(x)
-for x in list_of_avgmark: print(x)
+for x in list_of_avgmark_distinct: print(x)
 print()
