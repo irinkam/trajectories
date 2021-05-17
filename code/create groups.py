@@ -9,6 +9,7 @@ df = pd.DataFrame(data, columns=['number', 'name', 'avgMark'])
 
 list_of_disciplines = []
 list_of_avgmark = []
+list_of_disciplines_distinct = []
 
 for row in df.itertuples():
     count = 0
@@ -27,6 +28,13 @@ for row in df.itertuples():
             break
 #df.drop_duplicates(subset=['name'])
 
-for x in list_of_disciplines: print(x)
+i = 0
+while i < len(list_of_disciplines):
+    if not list_of_disciplines[i] in list_of_disciplines_distinct:
+        list_of_disciplines_distinct.append(list_of_disciplines[i])
+    i += 1
+
+
+for x in list_of_disciplines_distinct: print(x)
 for x in list_of_avgmark: print(x)
 print()
