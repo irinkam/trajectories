@@ -2,7 +2,7 @@ import os
 import mysql.connector
 import pandas as pd
 
-filepath = "C:\\Users\\lavol\\Desktop\Диплом\\disciplines.csv"
+filepath = os.path.dirname(os.path.dirname(os.path.abspath(__file__))) + "\\files\\disciplines.csv"
 data = pd.read_csv(filepath, delimiter=';', encoding='utf-8')
 
 df = pd.DataFrame(data, columns=['number', 'name', 'avgMark'])
