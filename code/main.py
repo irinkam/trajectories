@@ -78,7 +78,7 @@ cursor = conn.cursor()
 for row in df.itertuples():
     if not row.Оценка == 'зачтено' or not row.Оценка == 'незачет':
         cursor.execute(
-            "INSERT INTO marks (mark, year, semestr, students_id, disciplines_id) VALUES (%s, %s, %s, %s, (SELECT disciplines_id FROM disciplines WHERE name = %s))",
+            "INSERT INTO new_marks (mark, year, semestr, students_id, disciplines_id) VALUES (%s, %s, %s, %s, (SELECT disciplines_id FROM new_disciplines WHERE name = %s))",
             [row.Оценка,
              row.УчебныйГод,
              row.Семестр,
@@ -88,9 +88,9 @@ for row in df.itertuples():
 
 for row in df.itertuples():
     cursor.execute(
-        "INSERT INTO connection_of_disciplines (connection_id, first_discipline_id, second_discipline_id, weight)"
-        "VALUES (%s, %s, %s, %s, (select smth.disciplines_id, disciplines.disciplines_id, smth.avgMark / disciplines.avgMark "
-        "from disciplines cross join (select disciplines_id, avgMark from disciplines) as smth))"
+        "INSERT INTO new_connection_of_disciplines (connection_id, first_discipline_id, second_discipline_id, weight)"
+        "VALUES (%s, %s, %s, %s, (select smth.disciplines_id, new_disciplines.disciplines_id, smth.avgMark / new_disciplines.avgMark "
+        "from new_disciplines cross join (select disciplines_id, avgMark from new_disciplines) as smth))"
         "where disciplines.name <> smth.name and disciplines.avgMark is not null "
         "and (smth.name and disciplines.name) in"
         "(select name from marks join disciplines on marks.disciplines_id = disciplines.disciplines_id group by name having count(marks.disciplines_id) > 99)"

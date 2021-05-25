@@ -1,25 +1,25 @@
 # 1
-select distinct marks.disciplines_id,
+select distinct new_marks.disciplines_id,
                 round(avg(mark), 3) as 'Средняя оценка'
-from marks
-join disciplines on marks.disciplines_id = disciplines.disciplines_id
+from new_marks
+join new_disciplines on new_marks.disciplines_id = new_disciplines.disciplines_id
 where mark REGEXP '^-?[0-9]+$'
-group by marks.disciplines_id;
+group by new_marks.disciplines_id;
 # 2
-select distinct marks.disciplines_id,
+select distinct new_marks.disciplines_id,
                 round(avg(CONVERT(SUBSTRING_INDEX(mark,'-',-1),UNSIGNED INTEGER)),3)
-from marks
-join disciplines on marks.disciplines_id = disciplines.disciplines_id
+from new_marks
+join new_disciplines on new_marks.disciplines_id = new_disciplines.disciplines_id
 where mark REGEXP '^-?[0-9]+$'
-group by marks.disciplines_id;
+group by new_marks.disciplines_id;
 # заполнение средней оценки по дисциплине
-UPDATE disciplines
+UPDATE new_disciplines
 JOIN (
-        select distinct marks.disciplines_id as 'id',
+        select distinct new_marks.disciplines_id as 'id',
                         round(avg(mark), 3) as 'avgMark'
-        from marks
-        join disciplines on marks.disciplines_id = disciplines.disciplines_id
-        group by marks.disciplines_id)
+        from new_marks
+        join new_disciplines on new_marks.disciplines_id = new_disciplines.disciplines_id
+        group by new_marks.disciplines_id)
     AS temp
-    ON disciplines.disciplines_id = temp.id
-SET disciplines.avgMark = temp.avgMark;
+    ON new_disciplines.disciplines_id = temp.id
+SET new_disciplines.avgMark = temp.avgMark;
