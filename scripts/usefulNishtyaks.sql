@@ -2,10 +2,10 @@
 # и просто полезные запросы
 
 # дисциплины, за которые имеется больше N оценок
-select name, count(*)
+select distinct name, avgMark
 from new_marks
 join new_disciplines d on new_marks.disciplines_id = d.disciplines_id
-group by name
+group by name, avgMark
 having count(*) > 9;
 
 # группировка дисциплин с числами в названии (например, Математика 1.1, Математика 1.2 и пр)
@@ -89,7 +89,7 @@ order by count(code) desc;
 select distinct new_disciplines.disciplines_id
 from new_disciplines
 join new_marks nm on new_disciplines.disciplines_id = nm.disciplines_id
-where avgMark is not null
+where avgMark is not null;
 
 
 select smth.disciplines_id as 'dis_1', smth.avgMark as 'avg_1', new_disciplines.disciplines_id as 'dis_2', new_disciplines.avgMark as 'avg_2',
