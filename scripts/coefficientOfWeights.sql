@@ -13,7 +13,7 @@ where new_disciplines.disciplines_id <> smth.disciplines_id and new_disciplines.
           from new_marks
           join new_disciplines on new_marks.disciplines_id = new_disciplines.disciplines_id
           group by disciplines_id
-          # having count(new_marks.disciplines_id) > 9      # ограничение "больше 9 оценок за предмет", иначе скрипт долго работает
+          having count(new_marks.disciplines_id) > 9      # ограничение "больше 9 оценок за предмет", иначе скрипт долго работает
           )
     and new_disciplines.disciplines_id in
         (
@@ -21,5 +21,5 @@ where new_disciplines.disciplines_id <> smth.disciplines_id and new_disciplines.
             from new_marks
             join new_disciplines on new_marks.disciplines_id = new_disciplines.disciplines_id
             group by disciplines_id
-            # having count(new_marks.disciplines_id) > 9
+            having count(new_marks.disciplines_id) > 9
             );
