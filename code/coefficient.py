@@ -20,9 +20,9 @@ for row_1 in df_1.itertuples():
         coefficient = row_1.avgMark / row_2.avgMark
         if coefficient > 1: coefficient = 1 / coefficient
         list_of_disciplines_final.append([row_1.name, row_2.name, coefficient])
-        # df_2.drop()
+        df_2.drop(row_2)
         k += 1
-    # df_1.drop()
+    df_1.drop(row_1)
     i += 1
 
 for x in list_of_disciplines_final: print(x)
